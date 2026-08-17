@@ -99,9 +99,15 @@ func getFieldValue(item interface{}, fieldPath string) (interface{}, bool) {
 		if !ok {
 			return nil, false
 		}
+		if m == nil {
+			panic("nested object cannot be nil")
+		}
 		v, exists := m[p]
 		if !exists {
 			return nil, false
+		}
+		if v == nil {
+			panic("nested value cannot be nil")
 		}
 		current = v
 	}

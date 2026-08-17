@@ -142,6 +142,10 @@ func processObject(f *os.File, handler func(interface{}) bool) error {
 	if err := dec.Decode(&obj); err != nil {
 		return fmt.Errorf("解析JSON对象失败: %v", err)
 	}
+	if obj == nil {
+		handler(map[string]interface{}{})
+		return nil
+	}
 	handler(obj)
 	return nil
 }
