@@ -170,6 +170,6 @@ func toFloat64(v interface{}) (float64, error) {
 	case string:
 		return strconv.ParseFloat(x, 64)
 	default:
-		return 0, nil
+		return 0, fmt.Errorf("非数值类型无法比较: %T(%v)", v, v)
 	}
 }
