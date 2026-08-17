@@ -151,7 +151,11 @@ func processLines(f *os.File, handler func(interface{}) bool) error {
 	for {
 		var item interface{}
 		if err := dec.Decode(&item); err != nil {
-			return nil
+			// io.EOF 表示正常读完所有行；其余错误（如损坏行、截断的JSON）必须暴露给调用方
+			if err == io.EOF {
+				return nil
+			}
+			return fmt.Errorf("解析JSON行失败: %v", err)
 		}
 		if !handler(item) {
 			return nil

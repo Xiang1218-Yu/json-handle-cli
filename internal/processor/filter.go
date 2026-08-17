@@ -130,8 +130,12 @@ func matchCondition(item interface{}, field, op, expected string) bool {
 	fv, errNum := toFloat64(val)
 	fe, errExp := strconv.ParseFloat(expected, 64)
 	if errNum != nil || errExp != nil {
-		// 回退到字符串比较
-		s := fmt.Sprintf("%v", val)
+		// 仅当字段值本身是字符串时，才回退到字典序比较；非数值类型（bool、对象、数组等）
+		// 不应参与大小比较，避免无效数据混入数值筛选结果
+		s, isStr := val.(string)
+		if !isStr {
+			return false
+		}
 		switch op {
 		case ">":
 			return s > expected
@@ -170,6 +174,7 @@ func toFloat64(v interface{}) (float64, error) {
 	case string:
 		return strconv.ParseFloat(x, 64)
 	default:
-		return 0, nil
+		// bool、nil、对象、数组等均不可作为数值参与比较
+		return 0, fmt.Errorf("无法转为数值: %T(%v)", v, v)
 	}
 }
