@@ -1,0 +1,5 @@
+.cache/
+json-handle-cli
+coverage.out
+*.log
+.DS_Store

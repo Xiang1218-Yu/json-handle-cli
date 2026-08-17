@@ -1,0 +1,9 @@
+[
+  {"id": 1, "name": "Alice", "age": 25, "city": "Beijing", "salary": 12000.5, "status": "active", "password": "secret1", "tags": ["go", "java"]},
+  {"id": 2, "name": "Bob", "age": 17, "city": "Shanghai", "salary": 8000.0, "status": "inactive", "password": "secret2", "tags": ["python"]},
+  {"id": 3, "name": "Charlie", "age": 30, "city": "Beijing", "salary": 18500.75, "status": "active", "password": "secret3", "tags": ["go", "rust"]},
+  {"id": 4, "name": "Diana", "age": 42, "city": "Shenzhen", "salary": 25000.0, "status": "active", "password": "secret4", "tags": ["js", "go"]},
+  {"id": 5, "name": "Eve", "age": 15, "city": "Guangzhou", "salary": 0, "status": "inactive", "password": "secret5", "tags": []},
+  {"id": 6, "name": "Frank", "age": 28, "city": "Shanghai", "salary": 15200.0, "status": "active", "password": "secret6", "tags": ["java"]},
+  {"id": 7, "name": "Grace", "age": 35, "city": "Beijing", "salary": 21000.0, "status": "active", "password": "secret7", "tags": ["go", "c++"]}
+]

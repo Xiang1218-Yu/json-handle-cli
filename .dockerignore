@@ -1,0 +1,15 @@
+.git
+.github
+.DS_Store
+.cache
+*.patch
+*.diff
+*.log
+json-handle-cli
+bin/
+tmp/
+coverage.out
+BUG_REPRO.md
+private/
+registries/
+tasks/
