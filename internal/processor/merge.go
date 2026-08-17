@@ -33,6 +33,7 @@ func RunMerge(opts MergeOptions) (int, int, error) {
 	} else {
 		writer = jsonstream.NewStreamArrayWriter(out)
 	}
+	defer writer.Close()
 
 	totalRead := 0
 	totalWritten := 0

@@ -176,28 +176,26 @@ func NewStreamArrayWriter(w io.Writer) *StreamArrayWriter {
 
 func (sw *StreamArrayWriter) Write(v interface{}) error {
 	if !sw.started {
+		// 打开数组：第一个元素前不写分隔符
 		if _, err := sw.w.Write([]byte("[\n")); err != nil {
 			return err
 		}
 		sw.enc.SetIndent("  ", "  ")
 		sw.started = true
-	}
-	if sw.count > 0 {
+	} else {
+		// 后续元素前补一个逗号作为分隔符
 		if _, err := sw.w.Write([]byte(",\n")); err != nil {
 			return err
 		}
 	}
 	sw.count++
-	if err := sw.enc.Encode(v); err != nil {
-		return err
-	}
-	_, err := sw.w.Write([]byte(",\n"))
-	return err
+	return sw.enc.Encode(v)
 }
 
 func (sw *StreamArrayWriter) Close() error {
 	if !sw.started {
-		_, err := sw.w.Write([]byte("[]"))
+		// 没有写入任何元素时输出空数组，仍是合法 JSON
+		_, err := sw.w.Write([]byte("[]\n"))
 		return err
 	}
 	_, err := sw.w.Write([]byte("\n]\n"))
