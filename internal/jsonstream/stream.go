@@ -179,7 +179,7 @@ func (sw *StreamArrayWriter) Write(v interface{}) error {
 		if _, err := sw.w.Write([]byte("[\n")); err != nil {
 			return err
 		}
-		sw.enc.SetIndent("  ", "  ")
+		sw.enc.SetIndent("", "  ")
 		sw.started = true
 	}
 	if sw.count > 0 {
@@ -188,11 +188,7 @@ func (sw *StreamArrayWriter) Write(v interface{}) error {
 		}
 	}
 	sw.count++
-	if err := sw.enc.Encode(v); err != nil {
-		return err
-	}
-	_, err := sw.w.Write([]byte(",\n"))
-	return err
+	return sw.enc.Encode(v)
 }
 
 func (sw *StreamArrayWriter) Close() error {
