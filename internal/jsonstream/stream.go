@@ -42,8 +42,11 @@ func DetectStreamMode(filename string) (StreamMode, error) {
 			return StreamArray, nil
 		}
 		if c == '{' {
-			// 可能是对象或JSON Lines，读取更多判断
-			return StreamObject, nil
+			// 可能是单个对象或JSON Lines，回到文件起始进一步判断
+			if _, err := f.Seek(0, io.SeekStart); err != nil {
+				return StreamObject, nil
+			}
+			return detectObjectOrLines(f)
 		}
 		return StreamArray, fmt.Errorf("不支持的JSON格式，首字符: %c", c)
 	}
