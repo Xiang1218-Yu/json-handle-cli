@@ -88,6 +88,8 @@ func parseFilterExpr(expr string) (field, op, value string, err error) {
 }
 
 // getFieldValue 通过路径获取嵌套字段值，支持 a.b.c 格式
+// 当路径上的任一层级缺失或为 null 时，返回 (nil, false)，
+// 调用方可据此跳过该记录，而不是让空值阻断整批数据处理。
 func getFieldValue(item interface{}, fieldPath string) (interface{}, bool) {
 	if fieldPath == "" || fieldPath == "." {
 		return item, true
@@ -96,18 +98,14 @@ func getFieldValue(item interface{}, fieldPath string) (interface{}, bool) {
 	current := item
 	for _, p := range parts {
 		m, ok := current.(map[string]interface{})
-		if !ok {
+		if !ok || m == nil {
+			// 当前层级不是对象（或为 null），嵌套路径无法继续
 			return nil, false
-		}
-		if m == nil {
-			panic("nested object cannot be nil")
 		}
 		v, exists := m[p]
-		if !exists {
+		if !exists || v == nil {
+			// 字段缺失或显式为 null，视为不可用
 			return nil, false
-		}
-		if v == nil {
-			panic("nested value cannot be nil")
 		}
 		current = v
 	}

@@ -45,6 +45,10 @@ func DetectStreamMode(filename string) (StreamMode, error) {
 			// 可能是对象或JSON Lines，读取更多判断
 			return detectObjectOrLines(f)
 		}
+		if c == 'n' {
+			// 顶层 null 文档：按单条记录处理，值保留为 nil
+			return StreamObject, nil
+		}
 		return StreamArray, fmt.Errorf("不支持的JSON格式，首字符: %c", c)
 	}
 }
@@ -142,10 +146,8 @@ func processObject(f *os.File, handler func(interface{}) bool) error {
 	if err := dec.Decode(&obj); err != nil {
 		return fmt.Errorf("解析JSON对象失败: %v", err)
 	}
-	if obj == nil {
-		handler(map[string]interface{}{})
-		return nil
-	}
+	// 顶层 null 文档或任何顶层标量都作为单条记录原样交付，
+	// 不用空对象替换 nil，以免掩盖"空记录"这一事实。
 	handler(obj)
 	return nil
 }
