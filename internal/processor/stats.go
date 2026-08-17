@@ -89,6 +89,9 @@ func RunStats(opts StatsOptions) (*StatsResult, error) {
 	}
 
 	err = jsonstream.StreamProcess(opts.Input, mode, func(item interface{}) bool {
+		if result.TotalRecords > 0 {
+			return false
+		}
 		result.TotalRecords++
 		obj, isObj := item.(map[string]interface{})
 		if !isObj {
