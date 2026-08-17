@@ -196,7 +196,8 @@ func (sw *StreamArrayWriter) Close() error {
 		_, err := sw.w.Write([]byte("[]"))
 		return err
 	}
-	return nil
+	_, err := sw.w.Write([]byte("\n]"))
+	return err
 }
 
 // WriteJSONLines 写入JSON Lines格式

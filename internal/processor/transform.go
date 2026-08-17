@@ -45,6 +45,11 @@ func RunTransform(opts TransformOptions) (int, error) {
 	} else {
 		writer = jsonstream.NewStreamArrayWriter(out)
 	}
+	defer func() {
+		if cerr := writer.Close(); cerr != nil && err == nil {
+			err = cerr
+		}
+	}()
 
 	count := 0
 	err = jsonstream.StreamProcess(opts.Input, mode, func(item interface{}) bool {
