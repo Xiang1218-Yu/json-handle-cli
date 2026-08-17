@@ -170,6 +170,6 @@ func toFloat64(v interface{}) (float64, error) {
 	case string:
 		return strconv.ParseFloat(x, 64)
 	default:
-		return 0, fmt.Errorf("无法转为数值: %v", v)
+		return 0, nil
 	}
 }
